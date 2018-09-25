@@ -20,5 +20,20 @@ easyHTTP.prototype.get = function(url, callback){
 
 
 //Make an HTTp POST Request
+easyHTTP.prototype.post = function (url, data, callback) {
+  this.http.open('POST', url, true);
+  this.http.setRequestHeader('Content-type', 'application/json');
+  
+  let self = this;
+  //Arrow functions lexical "this" fixes bug instead of es5 "self" hack
+  this.http.onload = function() {
+      callback(null, self.http.responseText);
+  }
+  
+
+  this.http.send(JSON.stringify(data));
+}
+
+
 //Make an HTTp PUT Request
 //Make an HTTp DELETE Request
