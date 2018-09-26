@@ -35,5 +35,34 @@ easyHTTP.prototype.post = function (url, data, callback) {
 }
 
 
-//Make an HTTp PUT Request
+//Make an HTTP PUT Request
+easyHTTP.prototype.put = function (url, data, callback) {
+  this.http.open('PUT', url, true);
+  this.http.setRequestHeader('Content-type', 'application/json');
+  
+  let self = this;
+  //Arrow functions lexical "this" fixes bug instead of es5 "self" hack
+  this.http.onload = function() {
+      callback(null, self.http.responseText);
+  }
+  
+
+  this.http.send(JSON.stringify(data));
+}
+
+
 //Make an HTTp DELETE Request
+easyHTTP.prototype.delete = function(url, callback){
+  this.http.open('DELETE', url, true);
+  
+  let self = this;
+  //Arrow functions lexical "this" fixes bug instead of es5 "self" hack
+  this.http.onload = function() {
+    if (self.http.status === 200) {
+      callback(null,  'Post deleted');
+    } else {
+      callback('Error:' + self.http.status)
+    }
+  }
+  this.http.send();
+}
